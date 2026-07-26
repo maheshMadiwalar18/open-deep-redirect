@@ -80,17 +80,6 @@ const PROVIDERS = {
     description: (i) => `Watch ${i} live on Twitch. Tap to open in the Twitch app.`,
   },
 
-  // ── Reddit ────────────────────────────────────────────────────────────────
-  "reddit-post": {
-    oembed:      (i) => `https://www.reddit.com/oembed?url=${enc("https://www.reddit.com/r/" + i + "/")}`,
-    description: ()  => `A Reddit post. Tap to open directly in the Reddit app.`,
-  },
-  "reddit-subreddit": {
-    // Reddit community icon via their JSON API — no auth needed
-    thumbnail:   (i) => `https://www.reddit.com/r/${i}/about.json`,
-    description: (i) => `Browse r/${i} on Reddit. Tap to open in the Reddit app.`,
-  },
-
   // ── LinkedIn ──────────────────────────────────────────────────────────────
   // LinkedIn blocks all crawlers — unavatar can resolve some LinkedIn avatars
   "linkedin-profile": {
@@ -117,12 +106,6 @@ const PROVIDERS = {
   // ── WhatsApp ──────────────────────────────────────────────────────────────
   "whatsapp": {
     description: (i) => `Start a WhatsApp chat with ${i}. Tap to open directly in WhatsApp.`,
-  },
-
-  // ── GitHub ────────────────────────────────────────────────────────────────
-  "github-repo": {
-    thumbnail:   (i) => `https://opengraph.githubassets.com/1/${i}`,
-    description: (i) => `View the ${i} repository on GitHub. Tap to open in the GitHub app.`,
   },
 
   // ── Google Maps ───────────────────────────────────────────────────────────
@@ -169,21 +152,6 @@ const PROVIDERS = {
     description: ()  => `You've been invited to join a Discord server. Tap to open in the Discord app.`,
   },
 };
-
-// For reddit-subreddit, we need to fetch the community icon from their JSON API
-async function fetchRedditIcon(subreddit, signal) {
-  try {
-    const res = await fetch(`https://www.reddit.com/r/${subreddit}/about.json`, {
-      signal,
-      headers: { "User-Agent": "open-deep-redirect/1.0" },
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const icon = data?.data?.icon_img || data?.data?.community_icon;
-    if (icon) return icon.split("?")[0]; // strip query params
-  } catch (_) {}
-  return null;
-}
 
 export default async function (request, context) {
   // ── Opt-in gate ────────────────────────────────────────────────────────────
@@ -233,13 +201,9 @@ export default async function (request, context) {
       } catch (_) {}
     }
 
-    // Strategy 2: Direct thumbnail (zero-fetch for most, special fetch for reddit)
-    if (!finalImage) {
-      if (platformKey === "reddit-subreddit") {
-        finalImage = await fetchRedditIcon(ID, controller.signal);
-      } else if (provider?.thumbnail) {
-        finalImage = provider.thumbnail(ID);
-      }
+    // Strategy 2: Direct thumbnail (zero-fetch)
+    if (!finalImage && provider?.thumbnail) {
+      finalImage = provider.thumbnail(ID);
     }
 
     // Strategy 3: Native OG scrape — reads <head> of the target page
