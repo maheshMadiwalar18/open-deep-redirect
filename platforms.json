@@ -189,32 +189,6 @@
       "deepLink": "twitch://stream/{id}",
       "webLink": "https://www.twitch.tv/{id}"
     },
-    "reddit-post": {
-      "name": "Reddit",
-      "kind": "Post",
-      "icon": "⊛",
-      "color": "#FF4500",
-      "domains": ["reddit.com", "www.reddit.com", "old.reddit.com", "new.reddit.com", "m.reddit.com"],
-      "extractors": [
-        "reddit\\.com/r/([\\w-]+/comments/[a-z0-9]+)"
-      ],
-      "idValidator": "^[\\w-]+/comments/[a-z0-9]+$",
-      "deepLink": "https://www.reddit.com/r/{id}/",
-      "webLink": "https://www.reddit.com/r/{id}/"
-    },
-    "reddit-subreddit": {
-      "name": "Reddit",
-      "kind": "Subreddit",
-      "icon": "⊛",
-      "color": "#FF4500",
-      "domains": ["reddit.com", "www.reddit.com", "old.reddit.com", "new.reddit.com", "m.reddit.com"],
-      "extractors": [
-        "^https?://(?:www\\.|old\\.|new\\.|m\\.)?reddit\\.com/r/([\\w-]+)/?(?:[?#].*)?$"
-      ],
-      "idValidator": "^[\\w-]+$",
-      "deepLink": "https://www.reddit.com/r/{id}/",
-      "webLink": "https://www.reddit.com/r/{id}/"
-    },
     "linkedin-profile": {
       "name": "LinkedIn",
       "kind": "Profile",
@@ -280,19 +254,6 @@
       "idValidator": "^\\+?\\d+$",
       "deepLink": "whatsapp://send?phone={id}",
       "webLink": "https://wa.me/{id}"
-    },
-    "github-repo": {
-      "name": "GitHub",
-      "kind": "Repository",
-      "icon": "◎",
-      "color": "#24292F",
-      "domains": ["github.com", "www.github.com"],
-      "extractors": [
-        "^https?://(?:www\\.)?github\\.com/([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)/?(?:[?#].*)?$"
-      ],
-      "idValidator": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$",
-      "deepLink": "https://github.com/{id}",
-      "webLink": "https://github.com/{id}"
     },
     "maps-place": {
       "name": "Maps",
